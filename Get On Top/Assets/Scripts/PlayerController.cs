@@ -14,7 +14,11 @@ public class PlayerController : MonoBehaviour
 
     private PlayerState playerState;
 
-    [SerializeField] private float speed;
+    [SerializeField] private float movementSpeed;
+    [SerializeField] private float dashSpeed;
+
+    private float speed;
+
     [SerializeField] private float jumpHeight;
 
     private Rigidbody2D rb;
@@ -24,6 +28,9 @@ public class PlayerController : MonoBehaviour
     private float doubleJumpTimer;
     [SerializeField] private float timeBetweenJumps;
 
+    private float dashTimer;
+    [SerializeField] private float dashDuration;
+
     [SerializeField] private float gravityScale;
     [SerializeField] private float fastFallGravityScale;
 
@@ -31,6 +38,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
         rb.gravityScale = gravityScale;
+        speed = movementSpeed;
     }
 
     void Update()
@@ -42,20 +50,37 @@ public class PlayerController : MonoBehaviour
         switch (playerState)
         {
             case PlayerState.walking:
-                if (Input.GetAxis("Jump") == 1f)
+                if (Input.GetButtonDown("Jump"))
                 {
                     Jump();
                     doubleJumpTimer = 0f;
                     playerState = PlayerState.jumping;
                 }
+
+                if (Input.GetButtonDown("Dash"))
+                {
+                    dashTimer = 0f;
+                    speed = dashSpeed;
+                    playerState = PlayerState.dashing;
+                }
                 break;
+
+            case PlayerState.dashing:
+                dashTimer += Time.deltaTime;
+                if (dashTimer >= dashDuration)
+                {
+                    speed = movementSpeed;
+                    playerState = PlayerState.walking;
+                }
+                break;
+
             case PlayerState.jumping:
                 if (canDoubleJump)
                 {
                     doubleJumpTimer += Time.deltaTime;
                     if (doubleJumpTimer >= timeBetweenJumps)
                     {
-                        if (Input.GetAxis("Jump") == 1f)
+                        if (Input.GetButtonDown("Jump"))
                         {
                             Jump();
                             canDoubleJump = false;
