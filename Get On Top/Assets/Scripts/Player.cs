@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class Player : MonoBehaviour
 {
-    enum PlayerState
+    private enum PlayerState
     {
         walking,
         jumping,
@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
 
     private PlayerState playerState;
 
-    enum PlayerType
+    public enum PlayerType
     {
         playerOne,
         playerTwo
@@ -45,8 +45,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float gravityScale;
     [SerializeField] private float fastFallGravityScale;
 
+    private Vector2 startPosition;
+
     void Start()
     {
+        startPosition = gameObject.transform.position;
+
         rb = gameObject.GetComponent<Rigidbody2D>();
         rb.gravityScale = gravityScale;
         speed = movementSpeed;
@@ -106,9 +110,30 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public PlayerType GetPlayerType()
+    {
+        return playerType;
+    }
+
     private void Jump()
     {
         rb.AddForce(new Vector2(0, jumpHeight));
+    }
+
+    public void Respawn()
+    {
+        gameObject.transform.position = startPosition;
+        playerState = PlayerState.jumping;
+    }
+
+    public void Kill()
+    {
+        playerState = PlayerState.dead;
+    }
+
+    public bool IsDead()
+    {
+        return playerState == PlayerState.dead;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -117,6 +142,27 @@ public class PlayerController : MonoBehaviour
         {
             playerState = PlayerState.walking;
             canDoubleJump = true;
+        }
+
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Player otherPlayer = collision.gameObject.GetComponent<Player>();
+            if (otherPlayer.playerState == PlayerState.dead)
+            {
+                Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), collision.gameObject.GetComponent<Collider2D>(), true);
+            }
+            else
+            {
+                Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), collision.gameObject.GetComponent<Collider2D>(), false);
+
+                // See if the collision is on the top
+                Vector2 direction = collision.GetContact(0).normal;
+                if (direction.y == 1)
+                {
+                    Debug.Log("Collision on top!");
+                    otherPlayer.Kill();
+                }
+            }
         }
     }
 }
