@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private enum PlayerState
+    public enum PlayerState
     {
         walking,
         jumping,
         dashing,
+        squashed,
         dead
     }
 
@@ -69,7 +70,7 @@ public class Player : MonoBehaviour
         switch (playerState)
         {
             case PlayerState.walking:
-                if (Input.GetButtonDown(jumpMovementAxis))
+                if (Input.GetButtonDown(jumpMovementAxis) && Input.GetAxis(jumpMovementAxis) != -1)
                 {
                     Jump();
                     doubleJumpTimer = 0f;
@@ -126,14 +127,19 @@ public class Player : MonoBehaviour
         playerState = PlayerState.jumping;
     }
 
-    public void Kill()
+    private void Kill()
     {
         playerState = PlayerState.dead;
     }
 
-    public bool IsDead()
+    private void Squash()
     {
-        return playerState == PlayerState.dead;
+        playerState = PlayerState.squashed;
+    }
+
+    public PlayerState GetState()
+    {
+        return playerState;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -147,22 +153,19 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             Player otherPlayer = collision.gameObject.GetComponent<Player>();
-            if (otherPlayer.playerState == PlayerState.dead)
-            {
-                Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), collision.gameObject.GetComponent<Collider2D>(), true);
-            }
-            else
-            {
-                Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), collision.gameObject.GetComponent<Collider2D>(), false);
 
-                // See if the collision is on the top
-                Vector2 direction = collision.GetContact(0).normal;
-                if (direction.y == 1)
-                {
-                    Debug.Log("Collision on top!");
-                    otherPlayer.Kill();
-                }
+            // See if the collision is on the top
+            Vector2 direction = collision.GetContact(0).normal;
+            if (direction.y == 1)
+            {
+                Debug.Log("Collision on top!");
+                otherPlayer.Squash();
             }
+        }
+
+        if (collision.gameObject.CompareTag("KillBox"))
+        {
+            Kill();
         }
     }
 }

@@ -37,29 +37,47 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Check if any of the players have died
-        foreach(var player in players)
+        // Update the scores
+        foreach (var player in players)
         {
-            if (player.IsDead())
+            Player.PlayerState currentPlayerState = player.GetState();
+            switch (currentPlayerState)
             {
-                // Check if it's player 1 or player 2
-                switch (player.GetPlayerType())
-                {
-                    case Player.PlayerType.playerOne:
-                        PlayerTwoPoints++;
-                        break;
-                    case Player.PlayerType.playerTwo:
-                        PlayerOnePoints++;
-                        break;
-                }
+                case Player.PlayerState.squashed:
+                    // Check if it's player 1 or player 2
+                    switch (player.GetPlayerType())
+                    {
+                        case Player.PlayerType.playerOne:
+                            PlayerTwoPoints++;
+                            break;
+                        case Player.PlayerType.playerTwo:
+                            PlayerOnePoints++;
+                            break;
+                    }
 
-                player.Respawn();
+                    player.Respawn();
+                    break;
+
+                case Player.PlayerState.dead:
+                    // Check if it's player 1 or player 2
+                    switch (player.GetPlayerType())
+                    {
+                        case Player.PlayerType.playerOne:
+                            PlayerOnePoints--;
+                            break;
+                        case Player.PlayerType.playerTwo:
+                            PlayerTwoPoints--;
+                            break;
+                    }
+
+                    player.Respawn();
+                    break;
             }
         }
     }
