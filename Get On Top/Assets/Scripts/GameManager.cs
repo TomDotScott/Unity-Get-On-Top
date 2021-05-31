@@ -1,10 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private float maxPoints;
+
+    [SerializeField] private GameObject gameOverUI;
+    [SerializeField] private TextMeshProUGUI winnerText;
+
     [SerializeField] private TextMeshProUGUI playerOnePointsUI;
     private int playerOnePoints = 0;
 
@@ -15,6 +21,14 @@ public class GameManager : MonoBehaviour
         {
             playerOnePoints = value;
             playerOnePointsUI.text = playerOnePoints.ToString();
+
+            if (!gameOver)
+            {
+                if (playerTwoPoints == maxPoints)
+                {
+                    GameOver();
+                }
+            }
         }
     }
 
@@ -28,16 +42,25 @@ public class GameManager : MonoBehaviour
         {
             playerTwoPoints = value;
             playerTwoPointsUI.text = playerTwoPoints.ToString();
+
+            if (!gameOver)
+            {
+                if(playerTwoPoints == maxPoints)
+                {
+                    GameOver();
+                }
+            }
         }
     }
 
     [SerializeField] private Player[] players;
 
+    private bool gameOver = false;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        gameOverUI.SetActive(false);
     }
 
     // Update is called once per frame
@@ -80,5 +103,37 @@ public class GameManager : MonoBehaviour
                     break;
             }
         }
+    }
+
+    private void GameOver()
+    {
+        gameOver = true;
+
+        // Freeze the players
+        foreach(var player in players)
+        {
+            player.Frozen = true;
+        }
+
+        // Show the UI
+        gameOverUI.SetActive(true);
+
+        // Change the winning text and colour
+        if(playerOnePoints == maxPoints)
+        {
+            winnerText.text = "Player One Wins!";
+            winnerText.color = new Color(255, 0, 0);
+        }
+
+        if (playerTwoPoints == maxPoints)
+        {
+            winnerText.text = "Player Two Wins!";
+            winnerText.color = new Color(0, 0, 255);
+        }
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

@@ -48,6 +48,8 @@ public class Player : MonoBehaviour
 
     [SerializeField] private List<GameObject> respawnPositions;
 
+    public bool Frozen = false;
+
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
@@ -61,51 +63,54 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        float movementAxis = Input.GetAxis(hztlMovementAxis);
-        transform.position = transform.position + new Vector3(movementAxis * speed * Time.deltaTime, 0, 0);
-
-
-        switch (playerState)
+        if (!Frozen)
         {
-            case PlayerState.walking:
-                if (Input.GetButtonDown(jumpMovementAxis) && Input.GetAxis(jumpMovementAxis) != -1)
-                {
-                    Jump();
-                    doubleJumpTimer = 0f;
-                    playerState = PlayerState.jumping;
-                }
+            float movementAxis = Input.GetAxis(hztlMovementAxis);
+            transform.position = transform.position + new Vector3(movementAxis * speed * Time.deltaTime, 0, 0);
 
-                if (Input.GetButtonDown(dashMovementAxis))
-                {
-                    dashTimer = 0f;
-                    speed = dashSpeed;
-                    playerState = PlayerState.dashing;
-                }
-                break;
 
-            case PlayerState.dashing:
-                dashTimer += Time.deltaTime;
-                if (dashTimer >= dashDuration)
-                {
-                    speed = movementSpeed;
-                    playerState = PlayerState.walking;
-                }
-                break;
-
-            case PlayerState.jumping:
-                if (canDoubleJump)
-                {
-                    doubleJumpTimer += Time.deltaTime;
-                    if (doubleJumpTimer >= timeBetweenJumps && Input.GetButtonDown(jumpMovementAxis))
+            switch (playerState)
+            {
+                case PlayerState.walking:
+                    if (Input.GetButtonDown(jumpMovementAxis) && Input.GetAxis(jumpMovementAxis) != -1)
                     {
                         Jump();
-                        canDoubleJump = false;
+                        doubleJumpTimer = 0f;
+                        playerState = PlayerState.jumping;
                     }
-                }
 
-                rb.gravityScale = Input.GetAxis(jumpMovementAxis) == -1f ? fastFallGravityScale : gravityScale;
+                    if (Input.GetButtonDown(dashMovementAxis))
+                    {
+                        dashTimer = 0f;
+                        speed = dashSpeed;
+                        playerState = PlayerState.dashing;
+                    }
+                    break;
 
-                break;
+                case PlayerState.dashing:
+                    dashTimer += Time.deltaTime;
+                    if (dashTimer >= dashDuration)
+                    {
+                        speed = movementSpeed;
+                        playerState = PlayerState.walking;
+                    }
+                    break;
+
+                case PlayerState.jumping:
+                    if (canDoubleJump)
+                    {
+                        doubleJumpTimer += Time.deltaTime;
+                        if (doubleJumpTimer >= timeBetweenJumps && Input.GetButtonDown(jumpMovementAxis))
+                        {
+                            Jump();
+                            canDoubleJump = false;
+                        }
+                    }
+
+                    rb.gravityScale = Input.GetAxis(jumpMovementAxis) == -1f ? fastFallGravityScale : gravityScale;
+
+                    break;
+            }
         }
     }
 
