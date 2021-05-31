@@ -46,12 +46,10 @@ public class Player : MonoBehaviour
     [SerializeField] private float gravityScale;
     [SerializeField] private float fastFallGravityScale;
 
-    private Vector2 startPosition;
+    [SerializeField] private List<GameObject> respawnPositions;
 
     void Start()
     {
-        startPosition = gameObject.transform.position;
-
         rb = gameObject.GetComponent<Rigidbody2D>();
         rb.gravityScale = gravityScale;
         speed = movementSpeed;
@@ -123,7 +121,10 @@ public class Player : MonoBehaviour
 
     public void Respawn()
     {
-        gameObject.transform.position = startPosition;
+        // Choose random respawn position
+        int randomNum = Random.Range(0, respawnPositions.Count);
+        gameObject.transform.position = respawnPositions[randomNum].transform.position;
+
         playerState = PlayerState.jumping;
     }
 
