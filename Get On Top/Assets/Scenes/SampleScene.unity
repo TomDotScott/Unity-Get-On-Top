@@ -426,7 +426,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fa4368302be1fa429ab5fc23d8f458f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxPoints: 10
+  maxPoints: 5
   gameOverUI: {fileID: 130160194}
   winnerText: {fileID: 1064672919}
   playerOnePointsUI: {fileID: 1302922706}
@@ -1174,7 +1174,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 315460859}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -21.44, z: -38.15677}
+  m_LocalPosition: {x: 0, y: -26, z: -38.15677}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1226,7 +1226,7 @@ MonoBehaviour:
   zoomUpdateSpeed: 5
   panUpdateSpeed: 7
   positionUpdateSpeed: 5
-  zoomMax: 3
+  zoomMax: 5
   zoomMin: 12
   panMax: 11
   panMin: 3

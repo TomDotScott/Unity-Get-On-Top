@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
 
             if (!gameOver)
             {
-                if (playerTwoPoints == maxPoints)
+                if (playerOnePoints == maxPoints)
                 {
                     GameOver();
                 }
