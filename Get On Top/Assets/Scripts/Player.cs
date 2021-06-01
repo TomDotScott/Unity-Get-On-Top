@@ -131,6 +131,9 @@ public class Player : MonoBehaviour
         gameObject.transform.position = respawnPositions[randomNum].transform.position;
 
         playerState = PlayerState.jumping;
+
+        // Reset speed, in case of dashing
+        speed = movementSpeed;
     }
 
     private void Kill()
