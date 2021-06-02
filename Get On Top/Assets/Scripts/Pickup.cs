@@ -6,6 +6,7 @@ public class Pickup : MonoBehaviour
 {
     public enum PickupType
     {
+        Normal,
         BiggerShape,
         SmallerShape,
         Triangle,
@@ -14,6 +15,7 @@ public class Pickup : MonoBehaviour
     }
 
     public PickupType pickupType;
+    public float powerupDuration;
 
     [SerializeField] private float lifeTime;
     private float activeTimer;
@@ -28,7 +30,12 @@ public class Pickup : MonoBehaviour
         activeTimer -= Time.deltaTime;
         if(activeTimer <= 0)
         {
-            Destroy(gameObject);
+            Kill();
         }
+    }
+
+    public void Kill()
+    {
+        Destroy(gameObject);
     }
 }

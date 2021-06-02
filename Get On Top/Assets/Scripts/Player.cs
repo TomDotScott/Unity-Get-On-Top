@@ -48,8 +48,24 @@ public class Player : MonoBehaviour
 
     public bool Frozen = false;
 
+    [SerializeField] private TextMesh powerupText;
+    private Pickup.PickupType powerUpState;
+    private float powerupDuration = 0f;
+
+    public Pickup.PickupType PowerUpState
+    {
+        get => powerUpState;
+        set
+        {
+            powerUpState = value;
+            powerupText.text = value.ToString();
+        }
+    }
+
     void Start()
     {
+        powerUpState = Pickup.PickupType.Normal;
+
         rb = gameObject.GetComponent<Rigidbody2D>();
         rb.gravityScale = gravityScale;
         speed = movementSpeed;
@@ -66,6 +82,11 @@ public class Player : MonoBehaviour
             float movementAxis = Input.GetAxis(hztlMovementAxis);
             transform.position = transform.position + new Vector3(movementAxis * speed * Time.deltaTime, 0, 0);
 
+            powerupText.transform.position = new Vector3(
+                gameObject.transform.position.x, 
+                gameObject.transform.position.y + 0.5f, 
+                gameObject.transform.position.z
+                );
 
             switch (playerState)
             {
@@ -109,7 +130,37 @@ public class Player : MonoBehaviour
 
                     break;
             }
+
+            powerupDuration -= Time.deltaTime;
+            if (powerupDuration <= 0)
+            {
+                ResetPowerup();
+            }
         }
+    }
+
+    private void ApplyPowerup(Pickup.PickupType powerupType, float duration)
+    {
+        switch (powerupType)
+        {
+            case Pickup.PickupType.BiggerShape:
+                gameObject.transform.localScale = new Vector3(3, 1, 1);
+                break;
+        }
+        PowerUpState = powerupType;
+        powerupDuration = duration;
+    }
+
+    private void ResetPowerup()
+    {
+        switch (powerUpState)
+        {
+            case Pickup.PickupType.BiggerShape:
+                gameObject.transform.localScale = new Vector3(1, 1, 1);
+                break;
+        }
+
+        PowerUpState = Pickup.PickupType.Normal;
     }
 
     public PlayerType GetPlayerType()
@@ -125,6 +176,8 @@ public class Player : MonoBehaviour
     public void Respawn(Vector2 respawnPosition)
     {
         gameObject.transform.position = respawnPosition;
+
+        ResetPowerup();
 
         playerState = PlayerState.jumping;
 
@@ -171,6 +224,15 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag("KillBox"))
         {
             Kill();
+        }
+
+        if (collision.gameObject.CompareTag("Pickup"))
+        {
+            Pickup collidedPickup = collision.gameObject.GetComponent<Pickup>();
+
+            ApplyPowerup(collidedPickup.pickupType, collidedPickup.powerupDuration);
+
+            collidedPickup.Kill();
         }
     }
 }

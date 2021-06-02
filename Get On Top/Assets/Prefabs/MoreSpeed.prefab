@@ -114,7 +114,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 499c0fa5ae5b633448276c488542c5e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pickupType: 3
+  pickupType: 4
+  powerupDuration: 3
   lifeTime: 10
 --- !u!50 &3857793254008406276
 Rigidbody2D:
