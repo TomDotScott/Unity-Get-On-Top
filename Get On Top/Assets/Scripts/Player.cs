@@ -59,6 +59,9 @@ public class Player : MonoBehaviour
     [SerializeField] private float powerUpJumpHeight;
     [SerializeField] private float powerUpMovementSpeed;
     [SerializeField] private float powerUpDashSpeed;
+    [SerializeField] private Sprite defaultSprite;
+    [SerializeField] private Sprite triangleSprite;
+    private SpriteRenderer spriteRenderer;
     [SerializeField] private Pickup.PickupType powerUpState;
 
     [SerializeField] private TextMesh powerupText;
@@ -80,6 +83,9 @@ public class Player : MonoBehaviour
 
         rb = gameObject.GetComponent<Rigidbody2D>();
         rb.gravityScale = gravityScale;
+
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        spriteRenderer.sprite = defaultSprite;
 
         currentSpeed = movementSpeed;
         
@@ -173,6 +179,9 @@ public class Player : MonoBehaviour
                 currentSpeed = powerUpMovementSpeed;
                 currentDashSpeed = powerUpDashSpeed;
                 break;
+            case Pickup.PickupType.Triangle:
+                spriteRenderer.sprite = triangleSprite;
+                break;
         }
         PowerUpState = powerupType;
         powerupDuration = duration;
@@ -192,6 +201,9 @@ public class Player : MonoBehaviour
             case Pickup.PickupType.MoreSpeed:
                 currentSpeed = movementSpeed;
                 currentDashSpeed = dashSpeed;
+                break;
+            case Pickup.PickupType.Triangle:
+                spriteRenderer.sprite = defaultSprite;
                 break;
         }
 
@@ -241,18 +253,28 @@ public class Player : MonoBehaviour
         {
             playerState = PlayerState.walking;
             canDoubleJump = true;
+
+            // Stop the infinite dash glitch
+            currentSpeed = PowerUpState == Pickup.PickupType.MoreSpeed ? powerUpMovementSpeed : movementSpeed;
         }
 
         if (collision.gameObject.CompareTag("Player"))
         {
             Player otherPlayer = collision.gameObject.GetComponent<Player>();
 
-            // See if the collision is on the top
-            Vector2 direction = collision.GetContact(0).normal;
-            if (direction.y == 1)
+            if (otherPlayer.PowerUpState != Pickup.PickupType.Triangle)
             {
-                Debug.Log("Collision on top!");
-                otherPlayer.Squash();
+                // See if the collision is on the top
+                Vector2 direction = collision.GetContact(0).normal;
+                if (direction.y == 1)
+                {
+                    Debug.Log("Collision on top!");
+                    otherPlayer.Squash();
+                }
+            }
+            else
+            {
+                Kill();
             }
         }
 
