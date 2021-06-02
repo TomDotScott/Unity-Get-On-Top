@@ -443,6 +443,7 @@ MonoBehaviour:
   timerText: {fileID: 1838156306}
   gameTimer: 120
   pickUps:
+  - {fileID: 1379506123195766894, guid: 680c77474d2d9774fb1c563ab9d60396, type: 3}
   - {fileID: 7202245987517936001, guid: b6ffe23981243cd47a5b203b184f82cd, type: 3}
   timeBetweenPickUpSpawning: 7
 --- !u!4 &111141427
@@ -1540,7 +1541,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd5c52a7ee83f5840b00774659307306, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerType: 0
   movementSpeed: 10
   dashSpeed: 30
   jumpHeight: 450
@@ -1549,6 +1549,10 @@ MonoBehaviour:
   gravityScale: 2.5
   fastFallGravityScale: 10
   Frozen: 0
+  playerType: 0
+  bigShapeWidth: 3
+  smallShapeSize: 0.5
+  powerUpState: 0
   powerupText: {fileID: 260052537}
 --- !u!96 &521122478
 TrailRenderer:
@@ -8251,7 +8255,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd5c52a7ee83f5840b00774659307306, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerType: 1
   movementSpeed: 10
   dashSpeed: 30
   jumpHeight: 450
@@ -8260,6 +8263,10 @@ MonoBehaviour:
   gravityScale: 2.5
   fastFallGravityScale: 10
   Frozen: 0
+  playerType: 1
+  bigShapeWidth: 3
+  smallShapeSize: 0.5
+  powerUpState: 0
   powerupText: {fileID: 1851657393}
 --- !u!50 &2132038826
 Rigidbody2D:

@@ -4,28 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public enum PlayerState
-    {
-        walking,
-        jumping,
-        dashing,
-        squashed,
-        dead
-    }
-
-    private PlayerState playerState;
-
-    public enum PlayerType
-    {
-        playerOne,
-        playerTwo
-    }
-
-    [SerializeField] private PlayerType playerType;
-    private string hztlMovementAxis = "Horizontal";
-    private string jumpMovementAxis = "Jump";
-    private string dashMovementAxis = "Dash";
-
+    [Header("Player Movement Settings")]
     [SerializeField] private float movementSpeed;
     [SerializeField] private float dashSpeed;
 
@@ -45,11 +24,39 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float gravityScale;
     [SerializeField] private float fastFallGravityScale;
-
+    
     public bool Frozen = false;
 
+    public enum PlayerState
+    {
+        walking,
+        jumping,
+        dashing,
+        squashed,
+        dead
+    }
+
+    private PlayerState playerState;
+
+    public enum PlayerType
+    {
+        playerOne,
+        playerTwo
+    }
+
+    [Header("Player1/Player2 settings")]
+    [SerializeField] private PlayerType playerType;
+    private string hztlMovementAxis = "Horizontal";
+    private string jumpMovementAxis = "Jump";
+    private string dashMovementAxis = "Dash";
+
+
+    [Header("Powerup settings")]
+    [SerializeField] private float bigShapeWidth;
+    [SerializeField] private float smallShapeSize;
+    [SerializeField] private Pickup.PickupType powerUpState;
+
     [SerializeField] private TextMesh powerupText;
-    private Pickup.PickupType powerUpState;
     private float powerupDuration = 0f;
 
     public Pickup.PickupType PowerUpState
@@ -144,7 +151,10 @@ public class Player : MonoBehaviour
         switch (powerupType)
         {
             case Pickup.PickupType.BiggerShape:
-                gameObject.transform.localScale = new Vector3(3, 1, 1);
+                gameObject.transform.localScale = new Vector3(bigShapeWidth, 1, 1);
+                break;
+            case Pickup.PickupType.SmallerShape:
+                gameObject.transform.localScale = new Vector3(smallShapeSize, smallShapeSize, 1);
                 break;
         }
         PowerUpState = powerupType;
@@ -156,6 +166,7 @@ public class Player : MonoBehaviour
         switch (powerUpState)
         {
             case Pickup.PickupType.BiggerShape:
+            case Pickup.PickupType.SmallerShape:
                 gameObject.transform.localScale = new Vector3(1, 1, 1);
                 break;
         }
