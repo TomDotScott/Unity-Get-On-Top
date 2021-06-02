@@ -443,7 +443,7 @@ MonoBehaviour:
   timerText: {fileID: 1838156306}
   gameTimer: 120
   pickUps:
-  - {fileID: 3105029775140258344, guid: ab4fca0b665d8134cb23601f501854c2, type: 3}
+  - {fileID: 7156951013676805598, guid: a06dfe1ab25320c43b33ace1099b2c07, type: 3}
   timeBetweenPickUpSpawning: 7
 --- !u!4 &111141427
 Transform:
@@ -1552,6 +1552,8 @@ MonoBehaviour:
   bigShapeWidth: 3
   smallShapeSize: 0.5
   powerUpJumpHeight: 800
+  powerUpMovementSpeed: 20
+  powerUpDashSpeed: 50
   powerUpState: 0
   powerupText: {fileID: 260052537}
 --- !u!96 &521122478
@@ -8267,6 +8269,8 @@ MonoBehaviour:
   bigShapeWidth: 3
   smallShapeSize: 0.5
   powerUpJumpHeight: 800
+  powerUpMovementSpeed: 20
+  powerUpDashSpeed: 50
   powerUpState: 0
   powerupText: {fileID: 1851657393}
 --- !u!50 &2132038826

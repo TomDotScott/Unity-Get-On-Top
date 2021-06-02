@@ -6,9 +6,10 @@ public class Player : MonoBehaviour
 {
     [Header("Player Movement Settings")]
     [SerializeField] private float movementSpeed;
-    [SerializeField] private float dashSpeed;
-
     private float currentSpeed;
+
+    [SerializeField] private float dashSpeed;
+    private float currentDashSpeed;
 
     [SerializeField] private float jumpHeight;
     private float currentJumpHeight;
@@ -56,6 +57,8 @@ public class Player : MonoBehaviour
     [SerializeField] private float bigShapeWidth;
     [SerializeField] private float smallShapeSize;
     [SerializeField] private float powerUpJumpHeight;
+    [SerializeField] private float powerUpMovementSpeed;
+    [SerializeField] private float powerUpDashSpeed;
     [SerializeField] private Pickup.PickupType powerUpState;
 
     [SerializeField] private TextMesh powerupText;
@@ -79,6 +82,9 @@ public class Player : MonoBehaviour
         rb.gravityScale = gravityScale;
 
         currentSpeed = movementSpeed;
+        
+        currentDashSpeed = dashSpeed;
+
         currentJumpHeight = jumpHeight;
 
         hztlMovementAxis += playerType == PlayerType.playerOne ? "PlayerOne" : "PlayerTwo";
@@ -112,7 +118,7 @@ public class Player : MonoBehaviour
                     if (Input.GetButtonDown(dashMovementAxis))
                     {
                         dashTimer = 0f;
-                        currentSpeed = dashSpeed;
+                        currentSpeed = currentDashSpeed;
                         playerState = PlayerState.dashing;
                     }
                     break;
@@ -163,6 +169,10 @@ public class Player : MonoBehaviour
             case Pickup.PickupType.MoreJump:
                 currentJumpHeight = powerUpJumpHeight;
                 break;
+            case Pickup.PickupType.MoreSpeed:
+                currentSpeed = powerUpMovementSpeed;
+                currentDashSpeed = powerUpDashSpeed;
+                break;
         }
         PowerUpState = powerupType;
         powerupDuration = duration;
@@ -178,6 +188,10 @@ public class Player : MonoBehaviour
                 break;
             case Pickup.PickupType.MoreJump:
                 currentJumpHeight = jumpHeight;
+                break;
+            case Pickup.PickupType.MoreSpeed:
+                currentSpeed = movementSpeed;
+                currentDashSpeed = dashSpeed;
                 break;
         }
 

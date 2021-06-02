@@ -116,7 +116,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pickupType: 1
   powerupDuration: 7.5
-  lifeTime: 10
+  lifeTime: 9
 --- !u!50 &-4656341613511241375
 Rigidbody2D:
   serializedVersion: 4
