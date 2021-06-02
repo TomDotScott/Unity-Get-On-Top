@@ -7,6 +7,8 @@ using System;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private List<GameObject> spawnPositions;
+
     [SerializeField] private float maxPoints;
 
     [SerializeField] private GameObject gameOverUI;
@@ -61,6 +63,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private float gameTimer;
 
+    [SerializeField] private List<GameObject> pickUps;
+    [SerializeField] private float timeBetweenPickUpSpawning;
+    private float pickupSpawnTimer;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -90,7 +96,7 @@ public class GameManager : MonoBehaviour
                                 break;
                         }
 
-                        player.Respawn();
+                        player.Respawn(GetRandomPosition());
                         break;
 
                     case Player.PlayerState.dead:
@@ -105,12 +111,14 @@ public class GameManager : MonoBehaviour
                                 break;
                         }
 
-                        player.Respawn();
+                        player.Respawn(GetRandomPosition());
                         break;
                 }
             }
 
             CountDown();
+
+            AttemptToSpawnPickup();
         }
     }
 
@@ -133,6 +141,24 @@ public class GameManager : MonoBehaviour
         );
 
         timerText.SetText(timeRemaining);
+    }
+
+    private void AttemptToSpawnPickup()
+    {
+        pickupSpawnTimer -= Time.deltaTime;
+
+        if (pickupSpawnTimer <= 0)
+        {
+            Debug.Log("Attempting to spawn pickup");
+
+            GameObject pickup = pickUps[UnityEngine.Random.Range(0, pickUps.Count)];
+
+            Vector2 pickupPosition = GetRandomPosition();
+
+            Instantiate(pickup, new Vector3(pickupPosition.x, pickupPosition.y, 0), Quaternion.identity);
+
+            pickupSpawnTimer = timeBetweenPickUpSpawning;
+        }
     }
 
     private void GameOver()
@@ -170,5 +196,10 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    private Vector2 GetRandomPosition()
+    {
+        return spawnPositions[UnityEngine.Random.Range(0, spawnPositions.Count)].transform.position;
     }
 }

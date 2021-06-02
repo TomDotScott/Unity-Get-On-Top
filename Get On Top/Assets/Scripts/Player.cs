@@ -46,8 +46,6 @@ public class Player : MonoBehaviour
     [SerializeField] private float gravityScale;
     [SerializeField] private float fastFallGravityScale;
 
-    [SerializeField] private List<GameObject> respawnPositions;
-
     public bool Frozen = false;
 
     void Start()
@@ -124,11 +122,9 @@ public class Player : MonoBehaviour
         rb.AddForce(new Vector2(0, jumpHeight));
     }
 
-    public void Respawn()
+    public void Respawn(Vector2 respawnPosition)
     {
-        // Choose random respawn position
-        int randomNum = Random.Range(0, respawnPositions.Count);
-        gameObject.transform.position = respawnPositions[randomNum].transform.position;
+        gameObject.transform.position = respawnPosition;
 
         playerState = PlayerState.jumping;
 
