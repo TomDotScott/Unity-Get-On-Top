@@ -440,9 +440,15 @@ MonoBehaviour:
   players:
   - {fileID: 521122477}
   - {fileID: 2132038825}
-  timerText: {fileID: 1838156306}
+  startCountDownText: {fileID: 1702865456}
+  startCountDown: 3
+  gameTimerText: {fileID: 1838156306}
   gameTimer: 120
   pickUps:
+  - {fileID: 7202245987517936001, guid: b6ffe23981243cd47a5b203b184f82cd, type: 3}
+  - {fileID: 3105029775140258344, guid: ab4fca0b665d8134cb23601f501854c2, type: 3}
+  - {fileID: 7156951013676805598, guid: a06dfe1ab25320c43b33ace1099b2c07, type: 3}
+  - {fileID: 1379506123195766894, guid: 680c77474d2d9774fb1c563ab9d60396, type: 3}
   - {fileID: 5427720361005703782, guid: 5ab932164921775438690f60b16ba73d, type: 3}
   timeBetweenPickUpSpawning: 7
 --- !u!4 &111141427
@@ -1547,16 +1553,18 @@ MonoBehaviour:
   dashDuration: 0.1
   gravityScale: 2.5
   fastFallGravityScale: 10
+  respawnCoolDownTime: 0.5
   Frozen: 0
+  playerState: 0
   playerType: 0
   bigShapeWidth: 3
   smallShapeSize: 0.5
   powerUpJumpHeight: 800
-  powerUpMovementSpeed: 20
-  powerUpDashSpeed: 50
+  powerUpMovementSpeed: 15
+  powerUpDashSpeed: 40
   defaultSprite: {fileID: 21300000, guid: 70984c528a17f394392e8e24d7a9ba54, type: 3}
   triangleSprite: {fileID: 21300000, guid: 29e18f78b79b19b48b4f69aae2bca5ed, type: 3}
-  powerUpState: 0
+  powerUpState: 3
   powerupText: {fileID: 260052537}
 --- !u!96 &521122478
 TrailRenderer:
@@ -2761,6 +2769,7 @@ RectTransform:
   - {fileID: 275754141}
   - {fileID: 130160195}
   - {fileID: 1838156305}
+  - {fileID: 1702865455}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7964,6 +7973,142 @@ Transform:
   m_Father: {fileID: 1059344039}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1702865454
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1702865455}
+  - component: {fileID: 1702865457}
+  - component: {fileID: 1702865456}
+  m_Layer: 5
+  m_Name: StartCountDown
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1702865455
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1702865454}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1438541410}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0.0000076293945}
+  m_SizeDelta: {x: 731, y: 230.5}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1702865456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1702865454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: '3
+
+'
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 206.3
+  m_fontSizeBase: 36
+  m_fontWeight: 400
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 18
+  m_fontSizeMax: 5000
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1702865457
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1702865454}
+  m_CullTransparentMesh: 1
 --- !u!1 &1835225026
 GameObject:
   m_ObjectHideFlags: 0
@@ -8266,13 +8411,15 @@ MonoBehaviour:
   dashDuration: 0.1
   gravityScale: 2.5
   fastFallGravityScale: 10
+  respawnCoolDownTime: 0.5
   Frozen: 0
+  playerState: 0
   playerType: 1
   bigShapeWidth: 3
   smallShapeSize: 0.5
   powerUpJumpHeight: 800
-  powerUpMovementSpeed: 20
-  powerUpDashSpeed: 50
+  powerUpMovementSpeed: 15
+  powerUpDashSpeed: 40
   defaultSprite: {fileID: 21300000, guid: 70984c528a17f394392e8e24d7a9ba54, type: 3}
   triangleSprite: {fileID: 21300000, guid: 29e18f78b79b19b48b4f69aae2bca5ed, type: 3}
   powerUpState: 0

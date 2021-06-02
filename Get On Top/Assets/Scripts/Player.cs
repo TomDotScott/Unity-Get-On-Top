@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [Header("Player Movement Settings")]
+    [Header("Player Settings")]
     [SerializeField] private float movementSpeed;
     private float currentSpeed;
 
@@ -26,7 +26,10 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float gravityScale;
     [SerializeField] private float fastFallGravityScale;
-    
+
+    [SerializeField] private float respawnCoolDownTime;
+    private float respawnCoolDownTimer;
+
     public bool Frozen = false;
 
     public enum PlayerState
@@ -35,10 +38,11 @@ public class Player : MonoBehaviour
         jumping,
         dashing,
         squashed,
-        dead
+        dead,
+        respawning
     }
 
-    private PlayerState playerState;
+    [SerializeField] private PlayerState playerState;
 
     public enum PlayerType
     {
@@ -88,7 +92,7 @@ public class Player : MonoBehaviour
         spriteRenderer.sprite = defaultSprite;
 
         currentSpeed = movementSpeed;
-        
+
         currentDashSpeed = dashSpeed;
 
         currentJumpHeight = jumpHeight;
@@ -102,14 +106,25 @@ public class Player : MonoBehaviour
     {
         if (!Frozen)
         {
-            float movementAxis = Input.GetAxis(hztlMovementAxis);
-            transform.position = transform.position + new Vector3(movementAxis * currentSpeed * Time.deltaTime, 0, 0);
+            if (playerState != PlayerState.respawning)
+            {
+                float movementAxis = Input.GetAxis(hztlMovementAxis);
+                transform.position = transform.position + new Vector3(movementAxis * currentSpeed * Time.deltaTime, 0, 0);
 
-            powerupText.transform.position = new Vector3(
-                gameObject.transform.position.x, 
-                gameObject.transform.position.y + 0.5f, 
-                gameObject.transform.position.z
-                );
+                powerupText.transform.position = new Vector3(
+                    gameObject.transform.position.x,
+                    gameObject.transform.position.y + 0.5f,
+                    gameObject.transform.position.z
+                    );
+            }
+            else
+            {
+                respawnCoolDownTimer -= Time.deltaTime;
+                if (respawnCoolDownTimer <= 0)
+                {
+                    Reset();
+                }
+            }
 
             switch (playerState)
             {
@@ -123,6 +138,7 @@ public class Player : MonoBehaviour
 
                     if (Input.GetButtonDown(dashMovementAxis))
                     {
+                        Debug.Log("Dash");
                         dashTimer = 0f;
                         currentSpeed = currentDashSpeed;
                         playerState = PlayerState.dashing;
@@ -133,7 +149,8 @@ public class Player : MonoBehaviour
                     dashTimer += Time.deltaTime;
                     if (dashTimer >= dashDuration)
                     {
-                        currentSpeed = movementSpeed;
+                        currentSpeed = PowerUpState == Pickup.PickupType.MoreSpeed ? powerUpMovementSpeed : movementSpeed;
+
                         playerState = PlayerState.walking;
                     }
                     break;
@@ -154,10 +171,13 @@ public class Player : MonoBehaviour
                     break;
             }
 
-            powerupDuration -= Time.deltaTime;
-            if (powerupDuration <= 0)
+            if (powerUpState != Pickup.PickupType.Normal)
             {
-                ResetPowerup();
+                powerupDuration -= Time.deltaTime;
+                if (powerupDuration <= 0)
+                {
+                    Reset();
+                }
             }
         }
     }
@@ -187,25 +207,16 @@ public class Player : MonoBehaviour
         powerupDuration = duration;
     }
 
-    private void ResetPowerup()
+    private void Reset()
     {
-        switch (powerUpState)
-        {
-            case Pickup.PickupType.BiggerShape:
-            case Pickup.PickupType.SmallerShape:
-                gameObject.transform.localScale = new Vector3(1, 1, 1);
-                break;
-            case Pickup.PickupType.MoreJump:
-                currentJumpHeight = jumpHeight;
-                break;
-            case Pickup.PickupType.MoreSpeed:
-                currentSpeed = movementSpeed;
-                currentDashSpeed = dashSpeed;
-                break;
-            case Pickup.PickupType.Triangle:
-                spriteRenderer.sprite = defaultSprite;
-                break;
-        }
+        gameObject.transform.localScale = new Vector3(1, 1, 1);
+
+        currentJumpHeight = jumpHeight;
+
+        currentSpeed = movementSpeed;
+        currentDashSpeed = dashSpeed;
+
+        spriteRenderer.sprite = defaultSprite;
 
         PowerUpState = Pickup.PickupType.Normal;
     }
@@ -224,9 +235,10 @@ public class Player : MonoBehaviour
     {
         gameObject.transform.position = respawnPosition;
 
-        ResetPowerup();
+        Reset();
 
-        playerState = PlayerState.jumping;
+        playerState = PlayerState.respawning;
+        respawnCoolDownTimer = respawnCoolDownTime;
 
         // Reset speed, in case of dashing
         currentSpeed = movementSpeed;
@@ -286,7 +298,8 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag("Pickup"))
         {
             Pickup collidedPickup = collision.gameObject.GetComponent<Pickup>();
-
+            
+            Reset();
             ApplyPowerup(collidedPickup.pickupType, collidedPickup.powerupDuration);
 
             collidedPickup.Kill();

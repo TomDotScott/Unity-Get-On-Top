@@ -58,9 +58,13 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Player[] players;
 
+    [SerializeField] private TextMeshProUGUI startCountDownText;
+    [SerializeField] private float startCountDown;
+
+    private bool gameStarted = false;
     private bool gameOver = false;
 
-    [SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private TextMeshProUGUI gameTimerText;
     [SerializeField] private float gameTimer;
 
     [SerializeField] private List<GameObject> pickUps;
@@ -70,6 +74,15 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        playerOnePointsUI.gameObject.SetActive(false);
+        playerTwoPointsUI.gameObject.SetActive(false);
+        gameTimerText.gameObject.SetActive(false);
+
+        foreach(var player in players)
+        {
+            player.Frozen = true;
+        }
+
         gameOverUI.SetActive(false);
         pickupSpawnTimer = timeBetweenPickUpSpawning;
     }
@@ -77,49 +90,76 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!gameOver)
+        if (gameStarted)
         {
-            // Update the scores
-            foreach (var player in players)
+            if (!gameOver)
             {
-                Player.PlayerState currentPlayerState = player.GetState();
-                switch (currentPlayerState)
+                // Update the scores
+                foreach (var player in players)
                 {
-                    case Player.PlayerState.squashed:
-                        // Check if it's player 1 or player 2
-                        switch (player.GetPlayerType())
-                        {
-                            case Player.PlayerType.playerOne:
-                                PlayerTwoPoints++;
-                                break;
-                            case Player.PlayerType.playerTwo:
-                                PlayerOnePoints++;
-                                break;
-                        }
+                    Player.PlayerState currentPlayerState = player.GetState();
+                    switch (currentPlayerState)
+                    {
+                        case Player.PlayerState.squashed:
+                            // Check if it's player 1 or player 2
+                            switch (player.GetPlayerType())
+                            {
+                                case Player.PlayerType.playerOne:
+                                    PlayerTwoPoints++;
+                                    break;
+                                case Player.PlayerType.playerTwo:
+                                    PlayerOnePoints++;
+                                    break;
+                            }
 
-                        player.Respawn(GetRandomPosition());
-                        break;
+                            player.Respawn(GetRandomPosition());
+                            break;
 
-                    case Player.PlayerState.dead:
-                        // Check if it's player 1 or player 2
-                        switch (player.GetPlayerType())
-                        {
-                            case Player.PlayerType.playerOne:
-                                PlayerOnePoints--;
-                                break;
-                            case Player.PlayerType.playerTwo:
-                                PlayerTwoPoints--;
-                                break;
-                        }
+                        case Player.PlayerState.dead:
+                            // Check if it's player 1 or player 2
+                            switch (player.GetPlayerType())
+                            {
+                                case Player.PlayerType.playerOne:
+                                    PlayerOnePoints--;
+                                    break;
+                                case Player.PlayerType.playerTwo:
+                                    PlayerTwoPoints--;
+                                    break;
+                            }
 
-                        player.Respawn(GetRandomPosition());
-                        break;
+                            player.Respawn(GetRandomPosition());
+                            break;
+                    }
                 }
+
+                CountDown();
+
+                AttemptToSpawnPickup();
+            }
+        }
+        else
+        {
+            startCountDown -= Time.deltaTime;
+
+            if (startCountDown < 0)
+            {
+                foreach (var player in players)
+                {
+                    player.Frozen = false;
+                }
+
+                playerOnePointsUI.gameObject.SetActive(true);
+                playerTwoPointsUI.gameObject.SetActive(true);
+                gameTimerText.gameObject.SetActive(true);
+                startCountDownText.gameObject.SetActive(false);
+
+                gameStarted = true;
+            }
+            else
+            {
+                startCountDownText.text = ((int)startCountDown).ToString();
             }
 
-            CountDown();
-
-            AttemptToSpawnPickup();
         }
     }
 
@@ -141,7 +181,7 @@ public class GameManager : MonoBehaviour
                 t.Seconds
         );
 
-        timerText.SetText(timeRemaining);
+        gameTimerText.SetText(timeRemaining);
     }
 
     private void AttemptToSpawnPickup()
