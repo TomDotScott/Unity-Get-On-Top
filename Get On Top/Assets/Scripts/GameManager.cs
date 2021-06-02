@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -45,7 +46,7 @@ public class GameManager : MonoBehaviour
 
             if (!gameOver)
             {
-                if(playerTwoPoints == maxPoints)
+                if (playerTwoPoints == maxPoints)
                 {
                     GameOver();
                 }
@@ -57,6 +58,9 @@ public class GameManager : MonoBehaviour
 
     private bool gameOver = false;
 
+    [SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private float gameTimer;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -66,43 +70,69 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Update the scores
-        foreach (var player in players)
+        if (!gameOver)
         {
-            Player.PlayerState currentPlayerState = player.GetState();
-            switch (currentPlayerState)
+            // Update the scores
+            foreach (var player in players)
             {
-                case Player.PlayerState.squashed:
-                    // Check if it's player 1 or player 2
-                    switch (player.GetPlayerType())
-                    {
-                        case Player.PlayerType.playerOne:
-                            PlayerTwoPoints++;
-                            break;
-                        case Player.PlayerType.playerTwo:
-                            PlayerOnePoints++;
-                            break;
-                    }
+                Player.PlayerState currentPlayerState = player.GetState();
+                switch (currentPlayerState)
+                {
+                    case Player.PlayerState.squashed:
+                        // Check if it's player 1 or player 2
+                        switch (player.GetPlayerType())
+                        {
+                            case Player.PlayerType.playerOne:
+                                PlayerTwoPoints++;
+                                break;
+                            case Player.PlayerType.playerTwo:
+                                PlayerOnePoints++;
+                                break;
+                        }
 
-                    player.Respawn();
-                    break;
+                        player.Respawn();
+                        break;
 
-                case Player.PlayerState.dead:
-                    // Check if it's player 1 or player 2
-                    switch (player.GetPlayerType())
-                    {
-                        case Player.PlayerType.playerOne:
-                            PlayerOnePoints--;
-                            break;
-                        case Player.PlayerType.playerTwo:
-                            PlayerTwoPoints--;
-                            break;
-                    }
+                    case Player.PlayerState.dead:
+                        // Check if it's player 1 or player 2
+                        switch (player.GetPlayerType())
+                        {
+                            case Player.PlayerType.playerOne:
+                                PlayerOnePoints--;
+                                break;
+                            case Player.PlayerType.playerTwo:
+                                PlayerTwoPoints--;
+                                break;
+                        }
 
-                    player.Respawn();
-                    break;
+                        player.Respawn();
+                        break;
+                }
             }
+
+            CountDown();
         }
+    }
+
+    private void CountDown()
+    {
+        gameTimer -= Time.deltaTime;
+
+        // If the timer runs out, end the game
+        if (gameTimer < 1)
+        {
+            GameOver();
+        }
+
+        // Convert seconds to minutes and seconds
+        TimeSpan t = TimeSpan.FromSeconds(gameTimer);
+
+        string timeRemaining = string.Format("{0:D2}:{1:D2}",
+                t.Minutes,
+                t.Seconds
+        );
+
+        timerText.SetText(timeRemaining);
     }
 
     private void GameOver()
@@ -110,7 +140,7 @@ public class GameManager : MonoBehaviour
         gameOver = true;
 
         // Freeze the players
-        foreach(var player in players)
+        foreach (var player in players)
         {
             player.Frozen = true;
         }
@@ -119,16 +149,21 @@ public class GameManager : MonoBehaviour
         gameOverUI.SetActive(true);
 
         // Change the winning text and colour
-        if(playerOnePoints == maxPoints)
+        if (playerOnePoints > PlayerTwoPoints)
         {
             winnerText.text = "Player One Wins!";
             winnerText.color = new Color(255, 0, 0);
         }
 
-        if (playerTwoPoints == maxPoints)
+        else if (playerTwoPoints > PlayerOnePoints)
         {
             winnerText.text = "Player Two Wins!";
             winnerText.color = new Color(0, 0, 255);
+        }
+        else
+        {
+            winnerText.text = "Draw!";
+            winnerText.color = new Color(255, 255, 255);
         }
     }
 

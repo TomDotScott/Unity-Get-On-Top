@@ -100,7 +100,7 @@ public class Player : MonoBehaviour
                     if (canDoubleJump)
                     {
                         doubleJumpTimer += Time.deltaTime;
-                        if (doubleJumpTimer >= timeBetweenJumps && Input.GetButtonDown(jumpMovementAxis))
+                        if (doubleJumpTimer >= timeBetweenJumps && Input.GetButtonDown(jumpMovementAxis) && Input.GetAxis(jumpMovementAxis) > 0)
                         {
                             Jump();
                             canDoubleJump = false;
