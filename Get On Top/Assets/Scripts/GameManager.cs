@@ -71,6 +71,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         gameOverUI.SetActive(false);
+        pickupSpawnTimer = timeBetweenPickUpSpawning;
     }
 
     // Update is called once per frame

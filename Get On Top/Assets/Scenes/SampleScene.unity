@@ -443,8 +443,7 @@ MonoBehaviour:
   timerText: {fileID: 1838156306}
   gameTimer: 120
   pickUps:
-  - {fileID: 1379506123195766894, guid: 680c77474d2d9774fb1c563ab9d60396, type: 3}
-  - {fileID: 7202245987517936001, guid: b6ffe23981243cd47a5b203b184f82cd, type: 3}
+  - {fileID: 3105029775140258344, guid: ab4fca0b665d8134cb23601f501854c2, type: 3}
   timeBetweenPickUpSpawning: 7
 --- !u!4 &111141427
 Transform:
@@ -713,7 +712,7 @@ GameObject:
   - component: {fileID: 260052538}
   - component: {fileID: 260052537}
   m_Layer: 0
-  m_Name: P1 PUT
+  m_Name: P1 Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1333,7 +1332,7 @@ MonoBehaviour:
   - {fileID: 2132038824}
   zoomUpdateSpeed: 5
   panUpdateSpeed: 7
-  positionUpdateSpeed: 5
+  positionUpdateSpeed: 6
   zoomMax: 5
   zoomMin: 12
   panMax: 11
@@ -1365,7 +1364,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 8
+  orthographic size: 15
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1527,7 +1526,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1459950535}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &521122477
 MonoBehaviour:
@@ -1552,6 +1551,7 @@ MonoBehaviour:
   playerType: 0
   bigShapeWidth: 3
   smallShapeSize: 0.5
+  powerUpJumpHeight: 800
   powerUpState: 0
   powerupText: {fileID: 260052537}
 --- !u!96 &521122478
@@ -2793,8 +2793,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 260052536}
-  - {fileID: 521122476}
   - {fileID: 1851657395}
+  - {fileID: 521122476}
   - {fileID: 2132038829}
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -8138,7 +8138,7 @@ GameObject:
   - component: {fileID: 1851657394}
   - component: {fileID: 1851657393}
   m_Layer: 0
-  m_Name: P2 PUT
+  m_Name: P2 Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8220,7 +8220,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1459950535}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2132038824
 GameObject:
@@ -8266,6 +8266,7 @@ MonoBehaviour:
   playerType: 1
   bigShapeWidth: 3
   smallShapeSize: 0.5
+  powerUpJumpHeight: 800
   powerUpState: 0
   powerupText: {fileID: 1851657393}
 --- !u!50 &2132038826
