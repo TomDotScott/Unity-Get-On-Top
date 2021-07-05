@@ -52,6 +52,9 @@ public class Player : MonoBehaviour
 
     [Header("Player1/Player2 settings")]
     [SerializeField] private PlayerType playerType;
+    [SerializeField] private Color playerColor;
+    [SerializeField] private GameObject deathAnimationPrefab;
+
     private string hztlMovementAxis = "Horizontal";
     private string jumpMovementAxis = "Jump";
     private string dashMovementAxis = "Dash";
@@ -90,6 +93,7 @@ public class Player : MonoBehaviour
 
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = defaultSprite;
+        spriteRenderer.color = playerColor;
 
         currentSpeed = movementSpeed;
 
@@ -110,12 +114,6 @@ public class Player : MonoBehaviour
             {
                 float movementAxis = Input.GetAxis(hztlMovementAxis);
                 transform.position = transform.position + new Vector3(movementAxis * currentSpeed * Time.deltaTime, 0, 0);
-
-                powerupText.transform.position = new Vector3(
-                    gameObject.transform.position.x,
-                    gameObject.transform.position.y + 0.5f,
-                    gameObject.transform.position.z
-                    );
             }
             else
             {
@@ -233,6 +231,8 @@ public class Player : MonoBehaviour
 
     public void Respawn(Vector2 respawnPosition)
     {
+        Destroy(Instantiate(deathAnimationPrefab, gameObject.transform.position, Quaternion.identity), 2.0f);
+
         gameObject.transform.position = respawnPosition;
 
         Reset();

@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
         playerTwoPointsUI.gameObject.SetActive(false);
         gameTimerText.gameObject.SetActive(false);
 
-        foreach(var player in players)
+        foreach (var player in players)
         {
             player.Frozen = true;
         }
@@ -112,7 +112,7 @@ public class GameManager : MonoBehaviour
                                     break;
                             }
 
-                            player.Respawn(GetRandomPosition());
+                            RespawnPlayer(player);
                             break;
 
                         case Player.PlayerState.dead:
@@ -127,7 +127,7 @@ public class GameManager : MonoBehaviour
                                     break;
                             }
 
-                            player.Respawn(GetRandomPosition());
+                            RespawnPlayer(player);
                             break;
                     }
                 }
@@ -202,6 +202,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void RespawnPlayer(Player player)
+    {
+        // TODO: Vector2 spawnPosition = ChooseNextPlayerSpawnPosition(player);
+        Vector2 spawnPosition = GetRandomPosition();
+        player.Respawn(spawnPosition);
+    }
+
     private void GameOver()
     {
         gameOver = true;
@@ -243,4 +250,33 @@ public class GameManager : MonoBehaviour
     {
         return spawnPositions[UnityEngine.Random.Range(0, spawnPositions.Count)].transform.position;
     }
+
+    // TODO: Make the spawn positions smarter
+    /*private Vector2 ChooseNextPlayerSpawnPosition(Player player)
+    {
+        Vector2 furthestPosition = new Vector2(0, 0);
+
+        // choose the spawn position furthest away from the other player
+        foreach (var currentPlayer in players)
+        {
+            if (currentPlayer.GetPlayerType() != player.GetPlayerType())
+            {
+                Vector2 currentPlayerPosition = new Vector2(currentPlayer.transform.position.x, currentPlayer.transform.position.y);
+
+                // Find the furthest spawn position from the player
+                foreach (var spawnPosition in spawnPositions)
+                {
+                    if (Vector2.Distance(currentPlayerPosition, spawnPosition.transform.position) > furthestPosition.magnitude)
+                    {
+                        furthestPosition = new Vector2(
+                            spawnPosition.transform.position.x,
+                            spawnPosition.transform.position.y
+                            );
+                    }
+                }
+            }
+        }
+
+        return furthestPosition;
+    }*/
 }

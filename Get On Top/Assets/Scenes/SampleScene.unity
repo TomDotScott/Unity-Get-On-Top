@@ -732,10 +732,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 260052535}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -11.68, y: 8.31, z: 110.04352}
+  m_LocalPosition: {x: 0.029999733, y: 0.5600004, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1459950535}
+  m_Father: {fileID: 521122476}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!102 &260052537
@@ -1336,8 +1336,8 @@ MonoBehaviour:
   players:
   - {fileID: 521122472}
   - {fileID: 2132038824}
-  zoomUpdateSpeed: 5
-  panUpdateSpeed: 7
+  zoomUpdateSpeed: 7
+  panUpdateSpeed: 5
   positionUpdateSpeed: 6
   zoomMax: 5
   zoomMin: 12
@@ -1409,10 +1409,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 521122476}
+  - component: {fileID: 521122477}
   - component: {fileID: 521122475}
   - component: {fileID: 521122474}
   - component: {fileID: 521122473}
-  - component: {fileID: 521122477}
   - component: {fileID: 521122478}
   m_Layer: 0
   m_Name: PlayerOne
@@ -1510,7 +1510,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 70984c528a17f394392e8e24d7a9ba54, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1530,9 +1530,10 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -11.71, y: 7.75, z: 110.04352}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 260052536}
   m_Father: {fileID: 1459950535}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &521122477
 MonoBehaviour:
@@ -1557,6 +1558,8 @@ MonoBehaviour:
   Frozen: 0
   playerState: 0
   playerType: 0
+  playerColor: {r: 1, g: 0, b: 0, a: 1}
+  deathAnimationPrefab: {fileID: 9191944308964838477, guid: 97534a95a579366459a9a78a92dd68de, type: 3}
   bigShapeWidth: 3
   smallShapeSize: 0.5
   powerUpJumpHeight: 800
@@ -2805,8 +2808,6 @@ Transform:
   m_LocalPosition: {x: -6.382837, y: -3.3616493, z: -110.04352}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 260052536}
-  - {fileID: 1851657395}
   - {fileID: 521122476}
   - {fileID: 2132038829}
   m_Father: {fileID: 0}
@@ -8365,11 +8366,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1851657392}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 24.51, y: 8.31, z: 110.04352}
+  m_LocalPosition: {x: 0.010000229, y: 0.5600004, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1459950535}
-  m_RootOrder: 1
+  m_Father: {fileID: 2132038829}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2132038824
 GameObject:
@@ -8415,6 +8416,8 @@ MonoBehaviour:
   Frozen: 0
   playerState: 0
   playerType: 1
+  playerColor: {r: 0, g: 0, b: 1, a: 1}
+  deathAnimationPrefab: {fileID: 9191944308964838477, guid: 923f4f5eca2cbd44ca7d25ed27dde90d, type: 3}
   bigShapeWidth: 3
   smallShapeSize: 0.5
   powerUpJumpHeight: 800
@@ -8513,7 +8516,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 70984c528a17f394392e8e24d7a9ba54, type: 3}
-  m_Color: {r: 0, g: 0.14357352, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -8533,9 +8536,10 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 24.5, y: 7.75, z: 110.04352}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1851657395}
   m_Father: {fileID: 1459950535}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!96 &2132038830
 TrailRenderer:
