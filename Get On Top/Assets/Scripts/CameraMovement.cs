@@ -5,8 +5,7 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour
 {
     [SerializeField] private FocusLevel focusLevel;
-
-    [SerializeField] private List<GameObject> players;
+    private List<GameObject> players;
 
     [SerializeField] private float zoomUpdateSpeed;
     [SerializeField] private float panUpdateSpeed;
@@ -24,14 +23,20 @@ public class CameraMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        players.Add(focusLevel.gameObject);
+        players = new List<GameObject>
+        {
+            focusLevel.gameObject
+        };
     }
 
     // Update is called once per frame
     void LateUpdate()
     {
-        CalculateCameraLocation();
-        MoveCamera();
+        if (players.Count > 1)
+        {
+            CalculateCameraLocation();
+            MoveCamera();
+        }
     }
 
     private void MoveCamera()
@@ -94,5 +99,15 @@ public class CameraMovement : MonoBehaviour
 
         cameraEulerX = angle;
         cameraPosition = new Vector3(averageCentre.x, averageCentre.y, zoom);
+    }
+
+    public void AddPlayerToTrack(GameObject go)
+    {
+        players.Add(go);
+    }
+
+    public void StopTrackingPlayer(GameObject go)
+    {
+        players.Remove(go);
     }
 }

@@ -1,8 +1,9 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : NetworkBehaviour
 {
     [Header("Player Settings")]
     [SerializeField] private float movementSpeed;
@@ -86,6 +87,8 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        playerType = isLocalPlayer ? PlayerType.playerOne : PlayerType.playerTwo;
+
         powerUpState = Pickup.PickupType.Normal;
 
         rb = gameObject.GetComponent<Rigidbody2D>();
@@ -93,7 +96,8 @@ public class Player : MonoBehaviour
 
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = defaultSprite;
-        spriteRenderer.color = playerColor;
+
+        spriteRenderer.color = playerType == PlayerType.playerOne ? new Color(255, 0, 0) : new Color(0, 0, 255);
 
         currentSpeed = movementSpeed;
 
@@ -108,7 +112,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (!Frozen)
+        if (!Frozen && isLocalPlayer)
         {
             if (playerState != PlayerState.respawning)
             {
@@ -298,7 +302,7 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag("Pickup"))
         {
             Pickup collidedPickup = collision.gameObject.GetComponent<Pickup>();
-            
+
             Reset();
             ApplyPowerup(collidedPickup.pickupType, collidedPickup.powerupDuration);
 
