@@ -1,13 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
 
 public class Player : MonoBehaviour
 {
     [Header("Player Settings")]
-    public bool IsMultiplayer;
-
     [SerializeField] private float movementSpeed;
     private float currentSpeed;
 
@@ -53,8 +50,6 @@ public class Player : MonoBehaviour
         playerTwo
     }
 
-    private PhotonView photonView;
-
     [Header("Player1/Player2 settings")]
     [SerializeField] private PlayerType playerType;
     [SerializeField] private Color playerColor;
@@ -91,8 +86,6 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        photonView = gameObject.GetComponent<PhotonView>();
-
         powerUpState = Pickup.PickupType.Normal;
 
         rb = gameObject.GetComponent<Rigidbody2D>();
@@ -108,23 +101,14 @@ public class Player : MonoBehaviour
 
         currentJumpHeight = jumpHeight;
 
-        if (IsMultiplayer)
-        {
-            hztlMovementAxis += playerType == PlayerType.playerOne ? "PlayerOne" : "PlayerTwo";
-            jumpMovementAxis += playerType == PlayerType.playerOne ? "PlayerOne" : "PlayerTwo";
-            dashMovementAxis += playerType == PlayerType.playerOne ? "PlayerOne" : "PlayerTwo";
-        }
-        else
-        {
-            hztlMovementAxis += "PlayerOne";
-            jumpMovementAxis += "PlayerOne";
-            dashMovementAxis += "PlayerOne";
-        }
+        hztlMovementAxis += playerType == PlayerType.playerOne ? "PlayerOne" : "PlayerTwo";
+        jumpMovementAxis += playerType == PlayerType.playerOne ? "PlayerOne" : "PlayerTwo";
+        dashMovementAxis += playerType == PlayerType.playerOne ? "PlayerOne" : "PlayerTwo";
     }
 
     void Update()
     {
-        if (photonView.IsMine && !Frozen)
+        if (!Frozen)
         {
             if (playerState != PlayerState.respawning)
             {
@@ -193,11 +177,6 @@ public class Player : MonoBehaviour
                     Reset();
                 }
             }
-        }
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit();
         }
     }
 
